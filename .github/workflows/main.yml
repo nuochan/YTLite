@@ -116,16 +116,11 @@ jobs:
       - name: Install cyan
         run: pipx install --force https://github.com/asdfzxcvbn/pyzule-rw/archive/main.zip
 
-      - name: Download YouTube Plus explicitly
-        run: |
-          deb_url="https://github.com/dayanch96/YTLite/releases/download/v${{ github.event.inputs.tweak_version }}/com.dvntm.ytlite_${{ github.event.inputs.tweak_version }}_iphoneos-arm.deb"
-          wget "$deb_url" --no-verbose -O ytplus.deb
-
       - name: Inject tweaks into IPA
         run: |
           tweaks="ytplus.deb OpenYoutubeSafariExtension.appex"
           for f in *.deb; do
-            [ -f "$f" ] && [ "$f" != "ytplus.deb" ] && tweaks="$tweaks $f"
+            [ -f "$f" ] && tweaks="$tweaks $f"
           done
           cyan -i youtube.ipa -o YouTubePlus_${{ github.event.inputs.tweak_version }}.ipa -uwef $tweaks -n "${{ github.event.inputs.display_name }}" -b ${{ github.event.inputs.bundle_id }}
 
